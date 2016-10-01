@@ -40,9 +40,12 @@ const api = ({dispatch}) => next => action => {
       type: successType,
       payload: Object.assign({}, payload, response)
     }),
-    error => dispatch({
-      type: failType,
-      payload: Object.assign({}, payload, error)
-    }));
+    error => {
+      dispatch({
+        type: failType,
+        payload: Object.assign({}, payload, error)
+      });
+      throw error;
+    });
 };
 export default api;
