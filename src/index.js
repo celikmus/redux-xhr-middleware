@@ -1,7 +1,30 @@
 import merge from '../../../node_modules/lodash/merge';
 
 const request = (path, method, body) => {
+  const jsonContentAllowed = method === 'PUT' || method === 'POST';
+  const apiHeaders = {};
+  if (jsonContentAllowed && body) {
+    apiHeaders['Content-Type'] = 'application/json';
+  }
+  const acceptsJson = method === 'GET' || method === 'POST' || method === 'OPTIONS';
+  if (acceptsJson) {
+    apiHeaders.Accept = 'application/json';
+  }
 
+  const fetchPromise = fetch(path, {
+    method,
+    body,
+    headers: apiHeaders,
+    credentials: 'same-origin'
+  });
+  return fetchPromise.then(response => {
+    if (response.status >= 200 && response.status < 300) {
+      return response.json().then(null, () => null);
+    }
+    return response.json().then(err => {
+      throw err;
+    });
+  });
 };
 
 const api = ({dispatch}) => next => action => {
