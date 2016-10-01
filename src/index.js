@@ -1,4 +1,4 @@
-import merge from '../../../node_modules/lodash/merge';
+import merge from 'lodash/merge';
 
 const request = (path, method, body) => {
   const jsonContentAllowed = method === 'PUT' || method === 'POST';
