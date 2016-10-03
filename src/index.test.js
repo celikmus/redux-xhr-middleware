@@ -18,4 +18,16 @@ describe('api middleware', () => {
       expect(actionHandler.length).toBe(1);
     });
   });
+
+  describe('handle action', () => {
+    it('must pass action to next if not a function', done => {
+      const actionObj = {};
+
+      const actionHandler = nextHandler(action => {
+        expect(action).toBe(actionObj);
+        done();
+      });
+      actionHandler(actionObj);
+    });
+  });
 });
