@@ -20,14 +20,20 @@ describe('api middleware', () => {
   });
 
   describe('handle action', () => {
-    it('must pass action to next if not a function', done => {
+    it('must pass action to next', done => {
       const actionObj = {};
-
       const actionHandler = nextHandler(action => {
         expect(action).toBe(actionObj);
         done();
       });
       actionHandler(actionObj);
+    });
+
+    it('must return promise', () => {
+      const action = {types: ['a', 'b', 'c'], xhr: { url: '/', method: 'GET'}};
+      const actionHandler = nextHandler();
+      const outcome = actionHandler(action);
+      expect(outcome.constructor.name).toBe('Promise');
     });
   });
 });
