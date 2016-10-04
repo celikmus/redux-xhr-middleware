@@ -36,4 +36,13 @@ describe('api middleware', () => {
       expect(outcome.constructor.name).toBe('Promise');
     });
   });
+  describe('handle errors', () => {
+    it('must throw if argument is non-object', done => {
+      try {
+        apiMiddleware();
+      } catch (err) {
+        done();
+      }
+    });
+  });
 });
