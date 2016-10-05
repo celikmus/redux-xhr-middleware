@@ -43,9 +43,6 @@
       "js",
       "json"
     ],
-    "setupFiles": [
-      "./config/polyfills.js"
-    ],
     "testPathIgnorePatterns": [
       "./(build|docs|node_modules)/"
     ],

@@ -8,6 +8,9 @@ const plugins = [
   new webpack.DefinePlugin({
     'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
   }),
+  new webpack.ProvidePlugin({
+      'fetch': 'imports?this=>global!exports?global.fetch!whatwg-fetch'
+  })
 ];
 
 const filename = `redux-thunk${NODE_ENV === 'production' ? '.min' : ''}.js`;
@@ -32,7 +35,7 @@ export default {
   },
 
   entry: [
-    require.resolve('./config/polyfills'),    
+    require.resolve('whatwg-fetch'),
     './src/index',
   ],
 
