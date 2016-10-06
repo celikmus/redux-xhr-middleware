@@ -7,13 +7,10 @@
     "babel-eslint": "6.1.2",
     "babel-jest": "15.0.0",
     "babel-loader": "6.2.5",
-    "babel-preset-react-app": "^0.2.1",
+    "babel-preset-es2015": "^6.16.0",
+    "babel-preset-stage-0": "^6.16.0",
     "case-sensitive-paths-webpack-plugin": "1.1.4",
-    "connect-history-api-fallback": "1.3.0",
-    "cross-spawn": "4.0.0",
-    "css-loader": "0.24.0",
-    "detect-port": "1.0.0",
-    "dotenv": "2.0.0",
+    "cross-env": "^3.1.1",
     "eslint": "3.5.0",
     "eslint-config-react-app": "^0.2.1",
     "eslint-loader": "1.5.0",
@@ -24,6 +21,7 @@
     "file-loader": "0.9.0",
     "jest": "15.1.1",
     "object-assign": "4.1.0",
+    "path": "^0.12.7",
     "promise": "7.1.1",
     "rimraf": "2.5.4",
     "webpack": "1.13.2",
@@ -34,8 +32,16 @@
     "whatwg-fetch": "^1.0.0"
   },
   "scripts": {
-    "build": "node scripts/build.js",
-    "test": "node scripts/test.js --env=jsdom"
+    "clean": "rimraf lib dist es",
+    "build": "npm run build:commonjs && npm run build:umd && npm run build:umd:min && npm run build:es",
+    "prepublish": "npm run clean && npm run test && npm run build",
+    "posttest": "npm run lint",
+    "lint": "eslint src test",
+    "test": "node scripts/test.js --env=jsdom",
+    "build:commonjs": "cross-env BABEL_ENV=commonjs webpack",
+    "build:es": "cross-env NODE_ENV=es webpack",
+    "build:umd": "cross-env BABEL_ENV=commonjs NODE_ENV=development webpack",
+    "build:umd:min": "cross-env BABEL_ENV=commonjs NODE_ENV=production webpack"
   },
   "jest": {
     "moduleFileExtensions": [
@@ -48,11 +54,6 @@
     ],
     "testEnvironment": "node",
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(js|jsx)$"
-  },
-  "babel": {
-    "presets": [
-      "react-app"
-    ]
   },
   "eslintConfig": {
     "extends": "react-app"

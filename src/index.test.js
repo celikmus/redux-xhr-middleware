@@ -1,3 +1,4 @@
+import '../config/polyfills';
 import apiMiddleware from './index';
 
 
