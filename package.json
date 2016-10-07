@@ -1,6 +1,6 @@
 {
   "name": "redux-api-middleware",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "devDependencies": {
     "babel-core": "6.14.0",
