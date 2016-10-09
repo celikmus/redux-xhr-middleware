@@ -1,5 +1,8 @@
 import merge from 'lodash/merge';
 
+let token = '';
+let gateway = '';
+
 const request = (path, method, body) => {
   const jsonContentAllowed = method === 'PUT' || method === 'POST';
   const headers = {};
@@ -10,8 +13,12 @@ const request = (path, method, body) => {
   if (acceptsJson) {
     headers.Accept = 'application/json';
   }
-
-  const fetchPromise = fetch(path, {
+  if (token) {
+    headers.Authorization = token;
+  }
+  const urlPrefix = gateway || '';
+  const url = `${urlPrefix}${path}`;
+  const fetchPromise = fetch(url, {
     method,
     body,
     headers,
@@ -27,6 +34,10 @@ const request = (path, method, body) => {
   });
 };
 
+export const configure = (options) => {
+  gateway = options.gateway || '';
+  token = options.token || '';
+};
 const middleware = ({dispatch}) => next => action => {
   const {
     types,
@@ -71,4 +82,5 @@ const middleware = ({dispatch}) => next => action => {
       throw error;
     });
 };
+
 export default middleware;
