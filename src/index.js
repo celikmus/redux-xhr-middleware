@@ -2,19 +2,19 @@ import merge from 'lodash/merge';
 
 const request = (path, method, body) => {
   const jsonContentAllowed = method === 'PUT' || method === 'POST';
-  const apiHeaders = {};
+  const headers = {};
   if (jsonContentAllowed && body) {
-    apiHeaders['Content-Type'] = 'application/json';
+    headers['Content-Type'] = 'application/json';
   }
   const acceptsJson = method === 'GET' || method === 'POST' || method === 'OPTIONS';
   if (acceptsJson) {
-    apiHeaders.Accept = 'application/json';
+    headers.Accept = 'application/json';
   }
 
   const fetchPromise = fetch(path, {
     method,
     body,
-    headers: apiHeaders,
+    headers,
     credentials: 'same-origin'
   });
   return fetchPromise.then(response => {
@@ -27,7 +27,7 @@ const request = (path, method, body) => {
   });
 };
 
-const api = ({dispatch}) => next => action => {
+const middleware = ({dispatch}) => next => action => {
   const {
     types,
     xhr,
@@ -71,4 +71,4 @@ const api = ({dispatch}) => next => action => {
       throw error;
     });
 };
-export default api;
+export default middleware;

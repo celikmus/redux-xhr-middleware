@@ -1,11 +1,11 @@
 /*  eslint no-undef: 0  */
 import '../config/polyfills';
-import apiMiddleware from './index';
+import xhrMiddleware from './index';
 
 describe('api middleware', () => {
   const doDispatch = () => {};
   const doGetState = () => {};
-  const nextHandler = apiMiddleware({dispatch: doDispatch, getState: doGetState});
+  const nextHandler = xhrMiddleware({dispatch: doDispatch, getState: doGetState});
 
   it('must return a function to handle next', () => {
     expect(typeof nextHandler).toBe('function');
@@ -44,7 +44,7 @@ describe('api middleware', () => {
   describe('handle errors', () => {
     it('must throw if argument is non-object', done => {
       try {
-        apiMiddleware();
+        xhrMiddleware();
       } catch (err) {
         done();
       }

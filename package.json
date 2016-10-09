@@ -1,5 +1,5 @@
 {
-  "name": "redux-api-middleware",
+  "name": "redux-xhr-middleware",
   "version": "0.2.0",
   "private": true,
   "devDependencies": {

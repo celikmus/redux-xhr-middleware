@@ -6,11 +6,11 @@ const { NODE_ENV } = process.env;
 const plugins = [
   new webpack.optimize.OccurenceOrderPlugin(),
   new webpack.DefinePlugin({
-    'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
+    'process.env.NODE_ENV': JSON.stringify(NODE_ENV)
   })
 ];
 
-const filename = `redux-api.${NODE_ENV}.js`;
+const filename = `redux-xhr.${NODE_ENV}.js`;
 
 export default {
   module: {
@@ -19,20 +19,17 @@ export default {
         loaders: 'babel',
         include: path.resolve(__dirname, 'src')
       }
-    ],
+    ]
   },
-
   entry: [
     'whatwg-fetch',
-    './src/index',
+    './src/index'
   ],
-
   output: {
     path: path.join(__dirname, 'dist'),
     filename,
-    library: 'ReduxApi',
+    library: 'ReduxXhr',
     libraryTarget: 'umd'
   },
-
   plugins
 };
