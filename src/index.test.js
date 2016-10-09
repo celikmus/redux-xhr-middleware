@@ -30,11 +30,15 @@ describe('api middleware', () => {
       actionHandler(actionObj);
     });
 
-    it('must return promise', () => {
+    it('must return promise', (done) => {
       const action = {types: ['a', 'b', 'c'], xhr: { url: '/', method: 'GET'}};
       const actionHandler = nextHandler();
       const outcome = actionHandler(action);
       expect(outcome.constructor.name).toBe('Promise');
+      outcome
+        .then(() => {console.log('xhr resolved');})
+        .catch(()=> {console.log('xhr rejected');});
+      done();
     });
   });
   describe('handle errors', () => {
