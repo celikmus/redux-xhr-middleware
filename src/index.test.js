@@ -1,6 +1,6 @@
+/*  eslint no-undef: 0  */
 import '../config/polyfills';
 import apiMiddleware from './index';
-
 
 describe('api middleware', () => {
   const doDispatch = () => {};
@@ -31,13 +31,13 @@ describe('api middleware', () => {
     });
 
     it('must return promise', (done) => {
-      const action = {types: ['a', 'b', 'c'], xhr: { url: '/', method: 'GET'}};
+      const action = {types: ['a', 'b', 'c'], xhr: {url: '/', method: 'GET'}};
       const actionHandler = nextHandler();
       const outcome = actionHandler(action);
       expect(outcome.constructor.name).toBe('Promise');
       outcome
         .then(() => {})
-        .catch(()=> {});
+        .catch(() => {});
       done();
     });
   });
