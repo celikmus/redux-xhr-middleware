@@ -36,8 +36,8 @@ describe('api middleware', () => {
       const outcome = actionHandler(action);
       expect(outcome.constructor.name).toBe('Promise');
       outcome
-        .then(() => {console.log('xhr resolved');})
-        .catch(()=> {console.log('xhr rejected');});
+        .then(() => {})
+        .catch(()=> {});
       done();
     });
   });
