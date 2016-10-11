@@ -33,7 +33,7 @@ const request = (path, method, body) => {
 };
 
 export const configure = (headers = {}, gateway = '') => {
-  xhrHeaders = header;
+  xhrHeaders = headers;
   xhrGateway = gateway;
 };
 
