@@ -1,5 +1,4 @@
 process.env.NODE_ENV = 'test';
-process.env.PUBLIC_URL = '';
 
 // Load environment variables from .env file. Surpress warnings using silent
 // if this file is missing. dotenv will never modify any environment variables
@@ -14,6 +13,5 @@ const argv = process.argv.slice(2);
 if (!process.env.CI) {
   argv.push('--watch');
 }
-
 
 jest.run(argv);
