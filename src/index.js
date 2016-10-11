@@ -1,11 +1,11 @@
 import merge from 'lodash/merge';
 
-let token = '';
-let gateway = '';
+let xhrHeaders = {};
+let xhrGateway = {};
 
 const request = (path, method, body) => {
   const jsonContentAllowed = method === 'PUT' || method === 'POST';
-  const headers = {};
+  const headers = Object.assign({}, xhrHeaders);
   if (jsonContentAllowed && body) {
     headers['Content-Type'] = 'application/json';
   }
@@ -13,10 +13,8 @@ const request = (path, method, body) => {
   if (acceptsJson) {
     headers.Accept = 'application/json';
   }
-  if (token) {
-    headers.Authorization = token;
-  }
-  const urlPrefix = gateway || '';
+
+  const urlPrefix = xhrGateway || '';
   const url = `${urlPrefix}${path}`;
   const fetchPromise = fetch(url, {
     method,
@@ -34,10 +32,11 @@ const request = (path, method, body) => {
   });
 };
 
-export const configure = (options) => {
-  gateway = options.gateway || '';
-  token = options.token || '';
+export const configure = (headers = {}, gateway = '') => {
+  xhrHeaders = header;
+  xhrGateway = gateway;
 };
+
 const middleware = ({dispatch}) => next => action => {
   const {
     types,
