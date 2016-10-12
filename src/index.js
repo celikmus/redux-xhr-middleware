@@ -1,7 +1,7 @@
 import merge from 'lodash/merge';
 
 let xhrHeaders = {};
-let xhrGateway = {};
+let xhrGateway = '';
 
 const request = (path, method, body) => {
   const jsonContentAllowed = method === 'PUT' || method === 'POST';
@@ -14,8 +14,7 @@ const request = (path, method, body) => {
     headers.Accept = 'application/json';
   }
 
-  const urlPrefix = xhrGateway || '';
-  const url = `${urlPrefix}${path}`;
+  const url = `${xhrGateway}${path}`;
   const fetchPromise = fetch(url, {
     method,
     body,
