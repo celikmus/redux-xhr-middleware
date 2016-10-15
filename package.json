@@ -55,5 +55,11 @@
     ],
     "testEnvironment": "node",
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(js|jsx)$"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/celikmus/redux-xhr-middleware"
+  },
+  "author": "Mustafa Celik <celikmus@gmail.com>",
+  "license": "MIT"
 }
