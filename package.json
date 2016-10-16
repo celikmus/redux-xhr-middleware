@@ -34,15 +34,13 @@
   },
   "scripts": {
     "clean": "rimraf dist",
-    "build": "npm run build:commonjs && npm run build:umd && npm run build:es",
     "prepublish": "npm run clean && npm run test && npm run build",
     "posttest": "npm run lint",
     "lint": "eslint src",
     "test": "node scripts/test.js --env=jsdom",
-    "build:commonjs": "cross-env NODE_ENV=commonjs webpack",
-    "build:es": "cross-env NODE_ENV=es webpack",
-    "build:umd": "cross-env NODE_ENV=umd webpack"
+    "build": "webpack"
   },
+  "main": "dist",
   "jest": {
     "moduleFileExtensions": [
       "jsx",
