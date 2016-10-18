@@ -22,6 +22,6 @@ export default {
     library: 'ReduxXhrMiddleware'
   },
   plugins: [
-    // new webpack.optimize.UglifyJsPlugin()
+    new webpack.optimize.UglifyJsPlugin()
   ]
 };
