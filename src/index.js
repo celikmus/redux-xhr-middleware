@@ -1,31 +1,37 @@
 import merge from 'lodash/merge';
 
 const request = (path, method, body, requestOptions = {}) => {
-  const jsonContentAllowed = method === 'PUT' || method === 'POST';
   const {requestHeaders, requestGateway} = requestOptions;
   const headers = Object.assign({}, requestHeaders);
+
+  const jsonContentAllowed = method === 'PUT' || method === 'POST';
   if (jsonContentAllowed && body) {
     headers['Content-Type'] = 'application/json';
   }
+
   const acceptsJson = method === 'GET' || method === 'POST' || method === 'OPTIONS';
   if (acceptsJson) {
     headers.Accept = 'application/json';
   }
+
   const gateway = (!requestGateway || requestGateway === '/') ? '' : requestGateway;
   const url = `${gateway}${path}`;
-  const fetchPromise = fetch(url, {
-    method,
-    body,
-    headers,
-    credentials: 'same-origin'
-  });
-  return fetchPromise.then(response => {
-    if (response.status >= 200 && response.status < 300) {
-      return response.json().then(null, () => null);
+
+  return new Promise(function (resolve, reject) {
+    const xhrRequest = new XMLHttpRequest();
+    for (let header in headers) {
+      xhrRequest.setRequestHeader(header, headers[header]);
     }
-    return response.json().then(err => {
-      throw err;
-    });
+    xhrRequest.open(url, method);
+    xhrRequest.onreadystatechange = () => {
+      const {status, statusText, response} = xhrRequest;
+      if (status >= 200 && status < 300) {
+        resolve(response);
+      } else {
+        reject({status, statusText});
+      }
+    };
+    xhrRequest.send(body);
   });
 };
 
