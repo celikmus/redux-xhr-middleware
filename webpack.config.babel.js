@@ -4,7 +4,6 @@ import webpack from 'webpack';
 export default {
   devtool: 'source-map',
   entry: [
-    'whatwg-fetch',
     path.join(__dirname, 'src')
   ],
   module: {
