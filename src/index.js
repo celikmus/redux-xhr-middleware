@@ -18,20 +18,21 @@ const request = (path, method, body, requestOptions = {}) => {
   const url = `${gateway}${path}`;
 
   return new Promise(function (resolve, reject) {
-    const xhrRequest = new XMLHttpRequest();
+    const xhr = new XMLHttpRequest();
+    xhr.open(method, url);
     for (let header in headers) {
-      xhrRequest.setRequestHeader(header, headers[header]);
+      xhr.setRequestHeader(header, headers[header]);
     }
-    xhrRequest.open(url, method);
-    xhrRequest.onreadystatechange = () => {
-      const {status, statusText, response} = xhrRequest;
+    xhr.withCredentials = true;
+    xhr.onload = () => {
+      const {status, statusText, response} = xhr;
       if (status >= 200 && status < 300) {
         resolve(response);
       } else {
         reject({status, statusText});
       }
     };
-    xhrRequest.send(body);
+    xhr.send(body);
   });
 };
 
@@ -71,14 +72,15 @@ const creator = (options) => {
       response => dispatch({
         type: successType,
         payload: Object.assign({}, payload, response)
-      }),
-      error => {
-        dispatch({
-          type: failType,
-          payload: Object.assign({}, payload, error)
-        });
-        throw error;
-      });
+      })).catch(
+        error => {
+          dispatch({
+            type: failType,
+            payload: Object.assign({}, payload, error)
+          });
+          throw error;
+        }
+      );
   };
   return middleware;
 }
