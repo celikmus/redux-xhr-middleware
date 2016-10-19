@@ -27,9 +27,9 @@ const request = (path, method, body, requestOptions = {}) => {
     xhr.onload = () => {
       const {status, statusText, response} = xhr;
       if (status >= 200 && status < 300) {
-        resolve(response);
+        resolve(JSON.parse(response));
       } else {
-        reject({status, statusText});
+        throw statusText;
       }
     };
     xhr.send(body);
