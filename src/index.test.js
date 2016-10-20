@@ -34,7 +34,7 @@ describe('api middleware', () => {
   describe('handle errors', () => {
     it('must throw if argument is non-object', done => {
       try {
-        xhrMiddleware();
+        middleware();
       } catch (err) {
         done();
       }
