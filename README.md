@@ -11,7 +11,7 @@ yarn add redux-xhr-middleware
 ## Plug into your Redux store
 
 ```javascript
-import {createStore, applyMiddleware, combineReducers, compose} from 'redux';
+import {createStore, applyMiddleware} from 'redux';
 import xhrMiddlewareCreator from 'redux-xhr-middleware';
 import rootReducer from '../myRouteReducer';
 
@@ -47,6 +47,7 @@ const getSites = (siteId = '') => {
 };
 
 // Handle actions in your reducer:
+import merge from 'lodash/merge';
 
   // ...
   [GET_SITES_REQUEST]: state => Object.assign({}, state, {
