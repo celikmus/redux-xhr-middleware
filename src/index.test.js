@@ -6,7 +6,7 @@ describe('api middleware', () => {
   const doDispatch = () => {};
   const doGetState = () => {};
   const middleware = xhrMiddlewareCreator({gateway: '/'});
-  const nextHandler = middleware({dispatch: doDispatch(), getState: doGetState()});
+  const nextHandler = middleware({dispatch: doDispatch, getState: doGetState});
 
   it('must return a function to handle next', () => {
     expect(typeof nextHandler).toBe('function');
@@ -29,6 +29,18 @@ describe('api middleware', () => {
         done();
       });
       actionHandler(actionObj);
+    });
+
+    it('must return promise', (done) => {
+      const action = {types: ['a', 'b', 'c'], xhr: {url: '/', method: 'GET'}};
+      const actionHandler = nextHandler();
+
+      const outcome = actionHandler(action);
+      expect(outcome.constructor.name).toBe('Promise');
+      outcome
+        .then(() => { })
+        .catch(() => { });
+      done();
     });
   });
   describe('handle errors', () => {

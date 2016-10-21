@@ -68,11 +68,14 @@ const creator = (options) => {
     }));
 
     const method = xhr.method.toUpperCase();
-    return request(xhr.url, method, xhr.data, options).then(
-      response => dispatch({
+    return request(xhr.url, method, xhr.data, options)
+    .then(response => {
+      dispatch({
         type: successType,
         payload: Object.assign({}, payload, response)
-      })).catch(
+      });
+    })
+    .catch(
         error => {
           dispatch({
             type: failType,
