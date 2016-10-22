@@ -8,7 +8,7 @@ A light-weight middleware for Redux to do promise-based XHR requests. XHR header
 yarn add redux-xhr-middleware
 ```
 
-## Plug into your Redux store
+### 1. Plug into your Redux store
 
 ```javascript
 import {createStore, applyMiddleware} from 'redux';
@@ -28,8 +28,8 @@ const createReduxStore = initialState => {
 const store = createReduxStore();
 
 ```
-## Use in action creators to initiate XHR
-
+### 2. Use in your action creators to initiate XHR
+Your action creator needs to return an object with `types` and `xhr` properties, both must be provided.
 ```javascript
 const GET_SITES_REQUEST = 'GET_SITES_REQUEST';
 const GET_SITES_SUCCESS = 'GET_SITES_SUCCESS';
@@ -45,8 +45,9 @@ const getSites = (siteId = '') => {
     }
   };
 };
-
-// Handle actions in your reducer:
+```
+### 3. Finally, handle your actions in reducer:
+```javascript
 import merge from 'lodash/merge';
 
   // ...
@@ -64,3 +65,5 @@ import merge from 'lodash/merge';
   }),
   // ...
 ```
+## Configuring XHR middleware
+...
