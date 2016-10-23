@@ -24,7 +24,8 @@
     "path": "^0.12.7",
     "promise": "^7.1.1",
     "rimraf": "^2.5.4",
-    "webpack": "^1.13.2"
+    "webpack": "^1.13.2",
+    "yarn": "^0.16.1"
   },
   "dependencies": {
     "lodash.merge": "^4.6.0"
