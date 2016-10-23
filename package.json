@@ -31,8 +31,8 @@
   },
   "scripts": {
     "clean": "rimraf dist",
-    "prepublish": "npm run clean && npm run test && npm run build",
-    "posttest": "npm run lint",
+    "prepublish": "yarn run clean && yarn run test && yarn run build",
+    "posttest": "yarn run lint",
     "lint": "eslint src",
     "test": "node scripts/test.js --env=jsdom",
     "build": "webpack"
