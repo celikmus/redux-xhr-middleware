@@ -84,7 +84,7 @@ const xhrMiddleware = xhrMiddlewareCreator(options);
 ```javascript
 const options = {
   headers: {
-    Authentication:  'my token'
+    Authorization:  'my token'
   },
   gateway: '/api'
 };
