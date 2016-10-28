@@ -28,7 +28,8 @@
     "yarn": "^0.16.1"
   },
   "dependencies": {
-    "lodash.merge": "^4.6.0"
+    "lodash.merge": "^4.6.0",
+    "normalizr": "^2.2.1"
   },
   "scripts": {
     "clean": "rimraf dist",
