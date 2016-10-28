@@ -5,7 +5,8 @@
         "promise"
     ],
     "rules": {
-        "semi": 0
+        "semi": 0,
+        "no-trailing-spaces": [2, { "skipBlankLines": true }]        
     },
     "env": {
         "browser": true
