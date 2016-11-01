@@ -18,12 +18,12 @@ const request = (path, method, body, requestOptions = {}) => {
   const gateway = (!requestGateway || requestGateway === '/') ? '' : requestGateway;
   const url = `${gateway}${path}`;
 
-  return new Promise(function (resolve, reject) {
+  return new Promise(resolve => {
     const xhr = new XMLHttpRequest();
     xhr.open(method, url);
-    for (let header in headers) {
+    Object.keys(headers).forEach(header => {
       xhr.setRequestHeader(header, headers[header]);
-    }
+    });
     xhr.withCredentials = true;
     xhr.onload = () => {
       const {status, statusText, response} = xhr;
@@ -37,7 +37,7 @@ const request = (path, method, body, requestOptions = {}) => {
   });
 };
 
-const creator = (options) => {
+const creator = options => {
   const middleware = ({dispatch, getState}) => next => action => {
     const {
       types,
@@ -78,7 +78,6 @@ const creator = (options) => {
           payload: Object.assign({}, payload, response)
         });
       } else {
-        // Normalise response
         const state = getState();
         if (method.toUpperCase() === 'DELETE') {
           const urlParts = xhr.url.split('/');
@@ -90,8 +89,8 @@ const creator = (options) => {
           }));
         } else {
           let updatedResponse = response;
-          let isCollection = Array.isArray(response);
-          let hasPayload = !!Object.entries(payload).length;
+          const isCollection = Array.isArray(response);
+          const hasPayload = !!Object.entries(payload).length;
           if (hasPayload) {
             // Does response item/collection have sub collections?
             // If it does have sub collections, we need to link the entity to those collections,
@@ -112,17 +111,17 @@ const creator = (options) => {
             //
             // When the above schema setup is processed by the middleware here,
             // the middleware will add hotelId: 'XYZ' to each zone entry in the 'rooms' subcollection.
-            let itemSchema = schema.getItemSchema ? schema.getItemSchema() : schema;
-            let itemKey = itemSchema.itemId;
-            let sampleItem = isCollection ? response[0] || {} : response;
+            const itemSchema = schema.getItemSchema ? schema.getItemSchema() : schema;
+            const itemKey = itemSchema.itemId;
+            const sampleItem = isCollection ? response[0] || {} : response;
             // Get collection props
             const arrayProps = Object.keys(sampleItem).filter(prop => Array.isArray(sampleItem[prop]));
             // Insert itemId in sub collection...
             if (isCollection) {
               arrayProps.forEach(prop => {
                 if (itemSchema[prop]) {
-                  response.forEach((item) => {
-                    item[prop] = item[prop].map((subItem) => merge({}, subItem, { [itemKey]: item.id }));
+                  response.forEach(item => {
+                    item[prop] = item[prop].map(subItem => merge({}, subItem, {[itemKey]: item.id}));
                   });
                 }
               });
@@ -130,15 +129,22 @@ const creator = (options) => {
             } else {
               arrayProps.forEach(prop => {
                 if (itemSchema[prop]) {
-                  response[prop] = response[prop].map((subItem) => merge({}, subItem, { [itemKey]: response.id }));
+                  response[prop] = response[prop].map(subItem => merge({}, subItem, {[itemKey]: response.id}));
                 }
               });
               updatedResponse = Object.assign({}, response, payload);
             }
           }
+          let entitySchema = Object.assign({}, schema);
+          const schemaKey = isCollection ? schema.getItemSchema().getKey() : schema.getKey();
+          if (schemaKey) {
+            entitySchema = {[schemaKey]: schema};
+            updatedResponse = {[schemaKey]: updatedResponse};
+          }
+
           dispatch({
             type: successType,
-            payload: normalize(updatedResponse, schema)
+            payload: normalize(updatedResponse, entitySchema)
           });
         }
       }
@@ -154,6 +160,6 @@ const creator = (options) => {
       );
   };
   return middleware;
-}
+};
 
 export default creator;
