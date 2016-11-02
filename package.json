@@ -21,7 +21,6 @@
     "extract-text-webpack-plugin": "^1.0.1",
     "jest": "^16.0.1",
     "object-assign": "^4.1.0",
-    "path": "^0.12.7",
     "promise": "^7.1.1",
     "rimraf": "^2.5.4",
     "webpack": "^1.13.2",
