@@ -79,6 +79,7 @@ const creator = options => {
         });
       } else {
         const state = getState();
+        const isCollection = Array.isArray(response);
         if (method.toUpperCase() === 'DELETE') {
           const urlParts = xhr.url.split('/');
           const entityId = urlParts[urlParts.length - 1];
@@ -88,8 +89,6 @@ const creator = options => {
             type: successType
           }));
         } else {
-          let updatedResponse = response;
-          const isCollection = Array.isArray(response);
           const hasPayload = !!Object.entries(payload).length;
           if (hasPayload) {
             // Does response item/collection have sub collections?
@@ -125,26 +124,25 @@ const creator = options => {
                   });
                 }
               });
-              updatedResponse = response.map(entry => Object.assign({}, entry, payload));
             } else {
               arrayProps.forEach(prop => {
                 if (itemSchema[prop]) {
                   response[prop] = response[prop].map(subItem => merge({}, subItem, {[itemKey]: response.id}));
                 }
               });
-              updatedResponse = Object.assign({}, response, payload);
             }
           }
-          let entitySchema = Object.assign({}, schema);
+          let updatedResponse;
+          let entitySchema;
           const schemaKey = isCollection ? schema.getItemSchema().getKey() : schema.getKey();
-          if (schemaKey) {
+          if (schemaKey && isCollection) {
             entitySchema = {[schemaKey]: schema};
-            updatedResponse = {[schemaKey]: updatedResponse};
+            updatedResponse = {[schemaKey]: response};
           }
 
           dispatch({
             type: successType,
-            payload: normalize(updatedResponse, entitySchema)
+            payload: normalize(updatedResponse || response, entitySchema || schema)
           });
         }
       }
