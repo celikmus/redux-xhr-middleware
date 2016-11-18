@@ -70,22 +70,22 @@ You can specify an options object to the XHR middleware creator:
 
 ```javascript
 const options = {
-  headers: {},
-  gateway: ''
+  apiHeaders: {},
+  apiGateway: ''
 };
 const xhrMiddleware = xhrMiddlewareCreator(options);
 ```
 
-```headers``` can add/override any XHR header other than ```Accept``` and ```Content-Type``` headers, which are set as ```application/json``` by default.
+```apiHeaders``` can add/override any XHR header other than ```Accept``` and ```Content-Type``` headers, which are set as ```application/json``` by default.
 
-```gateway``` is a string as prefix to the paths, in case the API gateway is different to the application server, e.g. ```gateway``` could be ```https://myGateway.com:8081```.
+```apiGateway``` is a string as prefix to the paths, in case the API gateway is different to the application server, e.g. ```apiGateway``` could be ```https://myGateway.com:8081```.
 
 #### Example:
 ```javascript
 const options = {
-  headers: {
+  apiHeaders: {
     Authorization:  'my token'
   },
-  gateway: '/api'
+  apiGateway: '/api'
 };
 ```
