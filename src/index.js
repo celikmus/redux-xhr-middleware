@@ -1,12 +1,12 @@
 import merge from 'lodash/merge';
 import {normalize} from 'normalizr';
 
-const request = (path, method, body, requestOptions = {}) => {
-  const {requestHeaders, requestGateway} = requestOptions;
-  const headers = Object.assign({}, requestHeaders);
+const request = (path, method, body, apiOptions = {}, requestHeaders = {}) => {
+  const {apiHeaders, apiGateway} = apiOptions;
+  const headers = Object.assign({}, apiHeaders, requestHeaders);
 
   const jsonContentAllowed = method === 'PUT' || method === 'POST';
-  if (jsonContentAllowed && body) {
+  if (jsonContentAllowed && body && !headers['Content-Type']) {
     headers['Content-Type'] = 'application/json';
   }
 
@@ -15,7 +15,7 @@ const request = (path, method, body, requestOptions = {}) => {
     headers.Accept = 'application/json';
   }
 
-  const gateway = (!requestGateway || requestGateway === '/') ? '' : requestGateway;
+  const gateway = (!apiGateway || apiGateway === '/') ? '' : apiGateway;
   const url = `${gateway}${path}`;
 
   return new Promise(resolve => {
@@ -37,7 +37,7 @@ const request = (path, method, body, requestOptions = {}) => {
   });
 };
 
-const creator = options => {
+const creator = apiOptions => {
   const middleware = ({dispatch, getState}) => next => action => {
     const {
       types,
@@ -70,7 +70,7 @@ const creator = options => {
     }));
 
     const method = xhr.method.toUpperCase();
-    return request(xhr.url, method, xhr.data, options)
+    return request(xhr.url, method, xhr.data, apiOptions, xhr.headers)
     .then(response => {
       if (!schema) {
         dispatch({
@@ -79,7 +79,6 @@ const creator = options => {
         });
       } else {
         const state = getState();
-        const isCollection = Array.isArray(response);
         if (method.toUpperCase() === 'DELETE') {
           const urlParts = xhr.url.split('/');
           const entityId = urlParts[urlParts.length - 1];
@@ -89,6 +88,8 @@ const creator = options => {
             type: successType
           }));
         } else {
+          let updatedResponse = response;
+          const isCollection = Array.isArray(response);
           const hasPayload = !!Object.entries(payload).length;
           if (hasPayload) {
             // Does response item/collection have sub collections?
@@ -124,25 +125,26 @@ const creator = options => {
                   });
                 }
               });
+              updatedResponse = response.map(entry => Object.assign({}, entry, payload));
             } else {
               arrayProps.forEach(prop => {
                 if (itemSchema[prop]) {
                   response[prop] = response[prop].map(subItem => merge({}, subItem, {[itemKey]: response.id}));
                 }
               });
+              updatedResponse = Object.assign({}, response, payload);
             }
           }
-          let updatedResponse;
-          let entitySchema;
+          let entitySchema = Object.assign({}, schema);
           const schemaKey = isCollection ? schema.getItemSchema().getKey() : schema.getKey();
-          if (schemaKey && isCollection) {
+          if (schemaKey) {
             entitySchema = {[schemaKey]: schema};
-            updatedResponse = {[schemaKey]: response};
+            updatedResponse = {[schemaKey]: updatedResponse};
           }
 
           dispatch({
             type: successType,
-            payload: normalize(updatedResponse || response, entitySchema || schema)
+            payload: normalize(updatedResponse, entitySchema)
           });
         }
       }
