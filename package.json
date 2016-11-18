@@ -10,7 +10,7 @@
     "babel-preset-stage-0": "^6.16.0",
     "case-sensitive-paths-webpack-plugin": "^1.1.4",
     "dotenv": "^2.0.0",
-    "eslint": "3.10.0",
+    "eslint": "3.10.2",
     "eslint-config-standard": "^6.2.1",
     "eslint-loader": "^1.6.1",
     "eslint-plugin-import": "^2.1.0",
@@ -24,7 +24,7 @@
     "promise": "^7.1.1",
     "rimraf": "^2.5.4",
     "webpack": "^1.13.3",
-    "yarn": "^0.16.1"
+    "yarn": "^0.17.6"
   },
   "dependencies": {
     "lodash.merge": "^4.6.0",
