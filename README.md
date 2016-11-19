@@ -35,8 +35,8 @@ const GET_AUTHORS_REQUEST = 'GET_AUTHORS_REQUEST';
 const GET_AUTHORS_SUCCESS = 'GET_AUTHORS_SUCCESS';
 const GET_AUTHORS_FAIL = 'GET_AUTHORS_FAIL';
 
-const getSites = (siteId = '') => {
-  const url = siteId ? `/api/sites/${siteId}` : '/api/sites';
+const getAuthors = (authorId = '') => {
+  const url = siteId ? `/api/authors/${authorId}` : '/api/authors';
   return {
     types: [GET_AUTHORS_REQUEST, GET_AUTHORS_SUCCESS, GET_AUTHORS_FAIL],
     xhr: {
@@ -53,12 +53,12 @@ import merge from 'lodash/merge';
   // ...
   [GET_AUTHORS_REQUEST]: state => Object.assign({}, state, {
     fetchError: null,
-    sites: [], // * see note below
+    authors: [], // * see note below
     isGetting: true
   }),
   [GET_AUTHORS_SUCCESS]: (state, {payload}) => merge({}, state, {
     isGetting: false,
-    sites: payload  // * see note below
+    authors: payload  // * see note below
   }),
   [GET_AUTHORS_FAIL]: (state, {payload}) => Object.assign({}, initialState, {
     getError: payload,
@@ -90,5 +90,28 @@ const options = {
     Authorization:  'my token'
   },
   apiGateway: '/api'
+};
+```
+## Customising header on a single XHR request
+In your action creator, you can customise the HTTP header for your request.
+
+```javascript
+const CREATE_AUTHORS_REQUEST = 'CREATE_AUTHORS_REQUEST';
+const CREATE_AUTHORS_SUCCESS = 'CREATE_AUTHORS_SUCCESS';
+const CREATE_AUTHORS_FAIL = 'CREATE_AUTHORS_FAIL';
+
+const createAuthor = (payload) => {
+  const url = '/api/authors';
+  return {
+    types: [CREATE_AUTHORS_REQUEST, CREATE_AUTHORS_SUCCESS, CREATE_AUTHORS_FAIL],
+    xhr: {
+      url,
+      method: 'POST',
+      headers: {
+        'Accept': 'text/plain'
+      },
+      data: JSON.stringify(payload)
+    }
+  };
 };
 ```
