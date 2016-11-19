@@ -31,14 +31,14 @@ const store = createReduxStore();
 ### 2. Use in your action creators to initiate XHR
 Your action creator needs to return an object with `types` and `xhr` properties, both must be provided.
 ```javascript
-const GET_SITES_REQUEST = 'GET_SITES_REQUEST';
-const GET_SITES_SUCCESS = 'GET_SITES_SUCCESS';
-const GET_SITES_FAIL = 'GET_SITES_FAIL';
+const GET_AUTHORS_REQUEST = 'GET_AUTHORS_REQUEST';
+const GET_AUTHORS_SUCCESS = 'GET_AUTHORS_SUCCESS';
+const GET_AUTHORS_FAIL = 'GET_AUTHORS_FAIL';
 
 const getSites = (siteId = '') => {
   const url = siteId ? `/api/sites/${siteId}` : '/api/sites';
   return {
-    types: [GET_SITES_REQUEST, GET_SITES_SUCCESS, GET_SITES_FAIL],
+    types: [GET_AUTHORS_REQUEST, GET_AUTHORS_SUCCESS, GET_AUTHORS_FAIL],
     xhr: {
       url,
       method: 'GET'
@@ -51,19 +51,22 @@ const getSites = (siteId = '') => {
 import merge from 'lodash/merge';
 
   // ...
-  [GET_SITES_REQUEST]: state => Object.assign({}, state, {
+  [GET_AUTHORS_REQUEST]: state => Object.assign({}, state, {
     fetchError: null,
-    sites: [],
+    sites: [], // * see note below
     isGetting: true
   }),
-  [GET_SITES_SUCCESS]: (state, {payload}) => merge({}, state, {
-    isGetting: false
-  }, {sites: payload}),
-  [GET_SITES_FAIL]: (state, {payload}) => Object.assign({}, initialState, {
+  [GET_AUTHORS_SUCCESS]: (state, {payload}) => merge({}, state, {
+    isGetting: false,
+    sites: payload  // * see note below
+  }),
+  [GET_AUTHORS_FAIL]: (state, {payload}) => Object.assign({}, initialState, {
     getError: payload,
     isGetting: false
   }),
   // ...
+  // * note: If you use normalizr, you will not need to store entity data in these reducers,
+  // your dedicated 'entities' normalising reducer will keep that data.
 ```
 ## Configuring XHR middleware
 You can specify an options object to the XHR middleware creator:
