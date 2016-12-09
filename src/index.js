@@ -148,6 +148,7 @@ const creator = apiOptions => {
           });
         }
       }
+      return response;
     })
     .catch(
         error => {
