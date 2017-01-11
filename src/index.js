@@ -135,16 +135,10 @@ const creator = apiOptions => {
               updatedResponse = Object.assign({}, response, payload);
             }
           }
-          let entitySchema = Object.assign({}, schema);
-          const schemaKey = isCollection ? schema.getItemSchema().getKey() : schema.getKey();
-          if (schemaKey) {
-            entitySchema = {[schemaKey]: schema};
-            updatedResponse = {[schemaKey]: updatedResponse};
-          }
 
           dispatch({
             type: successType,
-            payload: normalize(updatedResponse, entitySchema)
+            payload: normalize(updatedResponse, schema)
           });
         }
       }
