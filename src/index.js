@@ -1,7 +1,7 @@
 import merge from 'lodash/merge';
 import {normalize} from 'normalizr';
 
-const request = (path, method, body, apiOptions = {}, requestHeaders = {}) => {
+const request = (path, method, body = null, apiOptions = {}, requestHeaders = {}) => {
   const {apiHeaders, apiGateway} = apiOptions;
   const headers = Object.assign({}, apiHeaders, requestHeaders);
 
