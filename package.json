@@ -1,6 +1,6 @@
 {
   "name": "redux-xhr-middleware",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "devDependencies": {
     "babel-core": "^6.20.0",
     "babel-eslint": "^7.1.0",
