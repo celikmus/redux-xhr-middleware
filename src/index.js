@@ -18,7 +18,7 @@ const request = (path, method, body = null, apiOptions = {}, requestHeaders = {}
   const gateway = (!apiGateway || apiGateway === '/') ? '' : apiGateway;
   const url = `${gateway}${path}`;
 
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     xhr.open(method, url);
     Object.keys(headers).forEach(header => {
@@ -26,11 +26,12 @@ const request = (path, method, body = null, apiOptions = {}, requestHeaders = {}
     });
     xhr.withCredentials = true;
     xhr.onload = () => {
-      const {status, statusText, response} = xhr;
+      const {status, response} = xhr;
+      const result = JSON.parse(response);
       if (status >= 200 && status < 300) {
-        resolve(JSON.parse(response));
+        resolve(result);
       } else {
-        throw statusText;
+        reject(result);
       }
     };
     xhr.send(body);
